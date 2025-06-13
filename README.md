@@ -13,6 +13,7 @@ Este proyecto es una aplicación de backend desarrollada en Node.js con Express 
 ## Participantes
 
 Ecduar Estrada CI 29718294 – [@ecduar](https://github.com/Ecduar)
+José Manuel Montilla CI 30.867.674 - [@danyer1234567] (https://github.com/danyer1234567)
 
 ## Funcionalidades Principales
 
