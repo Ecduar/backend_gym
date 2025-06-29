@@ -1,11 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const MetodoPagoController = require('../controllers/metodosPagoController');
-const ctrl = new MetodoPagoController();
+const metodosPagoController = require("../controllers/metodosPagoController");
 
-router.get('/', (req, res) => res.json(ctrl.listar()));
-router.post('/', (req, res) => res.json(ctrl.agregar(req.body)));
-router.put('/:id', (req, res) => res.json(ctrl.editar(req.params.id, req.body)));
-router.delete('/:id', (req, res) => res.json(ctrl.eliminar(req.params.id)));
+router.get("/", metodosPagoController.listar);
+router.post("/", metodosPagoController.agregar);
+router.put("/:id", metodosPagoController.actualizar);
+router.delete("/:id", metodosPagoController.eliminar);
 
 module.exports = router;

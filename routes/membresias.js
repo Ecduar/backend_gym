@@ -1,11 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const MembresiaController = require('../controllers/membresiasController');
-const ctrl = new MembresiaController();
+const membresiasController = require("../controllers/membresiasController");
 
-router.get('/', (req, res) => res.json(ctrl.listar()));
-router.post('/', (req, res) => res.json(ctrl.agregar(req.body)));
-router.put('/:id', (req, res) => res.json(ctrl.editar(req.params.id, req.body)));
-router.delete('/:id', (req, res) => res.json(ctrl.eliminar(req.params.id)));
+router.get("/", membresiasController.listar);
+router.post("/", membresiasController.agregar);
+router.put("/:id", membresiasController.actualizar);
+router.delete("/:id", membresiasController.eliminar);
 
 module.exports = router;

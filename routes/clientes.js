@@ -1,12 +1,10 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const ClienteController = require('../controllers/clienteController');
-const clienteCtrl = new ClienteController();
+const clienteController = require("../controllers/clienteController");
 
-router.get('/', (req, res) => res.json(clienteCtrl.listar()));
-router.post('/', (req, res) => res.json(clienteCtrl.agregar(req.body)));
-router.put('/:id', (req, res) => res.json(clienteCtrl.editar(req.params.id, req.body)));
-router.delete('/:id', (req, res) => res.json(clienteCtrl.eliminar(req.params.id)));
+router.get("/", clienteController.listar);
+router.post("/", clienteController.agregar);
+router.put("/:id", clienteController.actualizar);
+router.delete("/:id", clienteController.eliminar);
 
 module.exports = router;
