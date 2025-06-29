@@ -1,35 +1,26 @@
+const Espacio = require("../models/Espacio");
+
 class EspaciosController {
-  constructor() {
-    this.data = [];
-    this.nextId = 1;
+  async listar(req, res) {
+    const espacios = await Espacio.find();
+    res.json(espacios);
   }
 
-  listar() {
-    return this.data;
+  async agregar(req, res) {
+    const nuevo = new Espacio(req.body);
+    await nuevo.save();
+    res.status(201).json(nuevo);
   }
 
-  agregar(data) {
-    const nuevo = { id: this.nextId++, ...data };
-    this.data.push(nuevo);
-    return nuevo;
+  async actualizar(req, res) {
+    const actualizado = await Espacio.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(actualizado);
   }
 
-  editar(id, data) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      this.data[idx] = { ...this.data[idx], ...data };
-      return this.data[idx];
-    }
-    return { error: "No encontrado" };
-  }
-
-  eliminar(id) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      return this.data.splice(idx, 1)[0];
-    }
-    return { error: "No encontrado" };
+  async eliminar(req, res) {
+    await Espacio.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
   }
 }
 
-module.exports = EspaciosController;
+module.exports = new EspaciosController();

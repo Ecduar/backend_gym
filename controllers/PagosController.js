@@ -1,35 +1,26 @@
+const Pago = require("../models/Pago");
+
 class PagosController {
-  constructor() {
-    this.data = [];
-    this.nextId = 1;
+  async listar(req, res) {
+    const pagos = await Pago.find().populate("cliente membresia metodoPago");
+    res.json(pagos);
   }
 
-  listar() {
-    return this.data;
+  async agregar(req, res) {
+    const nuevo = new Pago(req.body);
+    await nuevo.save();
+    res.status(201).json(nuevo);
   }
 
-  agregar(data) {
-    const nuevo = { id: this.nextId++, ...data };
-    this.data.push(nuevo);
-    return nuevo;
+  async actualizar(req, res) {
+    const actualizado = await Pago.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(actualizado);
   }
 
-  editar(id, data) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      this.data[idx] = { ...this.data[idx], ...data };
-      return this.data[idx];
-    }
-    return { error: "No encontrado" };
-  }
-
-  eliminar(id) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      return this.data.splice(idx, 1)[0];
-    }
-    return { error: "No encontrado" };
+  async eliminar(req, res) {
+    await Pago.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
   }
 }
 
-module.exports = PagosController;
+module.exports = new PagosController();

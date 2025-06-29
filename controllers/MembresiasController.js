@@ -1,35 +1,27 @@
-class MembresiaController {
-  constructor() {
-    this.data = [];
-    this.nextId = 1;
+const Membresia = require("../models/Membresia");
+
+class MembresiasController {
+  async listar(req, res) {
+    const membresias = await Membresia.find().populate("cliente espacios");
+    res.json(membresias);
   }
 
-  listar() {
-    return this.data;
+  async agregar(req, res) {
+    const nueva = new Membresia(req.body);
+    await nueva.save();
+    res.status(201).json(nueva);
   }
 
-  agregar(data) {
-    const nuevo = { id: this.nextId++, ...data };
-    this.data.push(nuevo);
-    return nuevo;
+  async actualizar(req, res) {
+    const actualizada = await Membresia.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(actualizada);
   }
 
-  editar(id, data) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      this.data[idx] = { ...this.data[idx], ...data };
-      return this.data[idx];
-    }
-    return { error: "No encontrado" };
-  }
-
-  eliminar(id) {
-    const idx = this.data.findIndex(item => item.id == id);
-    if (idx >= 0) {
-      return this.data.splice(idx, 1)[0];
-    }
-    return { error: "No encontrado" };
+  async eliminar(req, res) {
+    await Membresia.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
   }
 }
 
-module.exports = MembresiaController;
+module.exports = new MembresiasController();
+

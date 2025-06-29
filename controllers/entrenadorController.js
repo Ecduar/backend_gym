@@ -1,36 +1,27 @@
+const Entrenador = require("../models/Entrenador");
 
 class EntrenadorController {
-  constructor() {
-    this.entrenadores = [];
-    this.nextId = 1;
+  async listar(req, res) {
+    const entrenadores = await Entrenador.find();
+    res.json(entrenadores);
   }
 
-  listar() {
-    return this.entrenadores;
+  async agregar(req, res) {
+    const nuevo = new Entrenador(req.body);
+    await nuevo.save();
+    res.status(201).json(nuevo);
   }
 
-  agregar(data) {
-    const nuevo = { id: this.nextId++, ...data };
-    this.entrenadores.push(nuevo);
-    return nuevo;
+  async actualizar(req, res) {
+    const actualizado = await Entrenador.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(actualizado);
   }
 
-  editar(id, data) {
-    const idx = this.entrenadores.findIndex(c => c.id == id);
-    if (idx >= 0) {
-      this.entrenadores[idx] = { ...this.entrenadores[idx], ...data };
-      return this.entrenadores[idx];
-    }
-    return { error: "Entrenador no encontrado" };
-  }
-
-  eliminar(id) {
-    const idx = this.entrenadores.findIndex(c => c.id == id);
-    if (idx >= 0) {
-      return this.entrenadores.splice(idx, 1)[0];
-    }
-    return { error: "Entrenador no encontrado" };
+  async eliminar(req, res) {
+    await Entrenador.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
   }
 }
 
-module.exports = EntrenadorController;
+module.exports = new EntrenadorController();
+

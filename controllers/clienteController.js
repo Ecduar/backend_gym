@@ -1,36 +1,26 @@
+const Cliente = require("../models/Cliente");
 
 class ClienteController {
-  constructor() {
-    this.clientes = [];
-    this.nextId = 1;
+  async listar(req, res) {
+    const clientes = await Cliente.find();
+    res.json(clientes);
   }
 
-  listar() {
-    return this.clientes;
+  async agregar(req, res) {
+    const nuevo = new Cliente(req.body);
+    await nuevo.save();
+    res.status(201).json(nuevo);
   }
 
-  agregar(data) {
-    const nuevo = { id: this.nextId++, ...data };
-    this.clientes.push(nuevo);
-    return nuevo;
+  async actualizar(req, res) {
+    const actualizado = await Cliente.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(actualizado);
   }
 
-  editar(id, data) {
-    const idx = this.clientes.findIndex(c => c.id == id);
-    if (idx >= 0) {
-      this.clientes[idx] = { ...this.clientes[idx], ...data };
-      return this.clientes[idx];
-    }
-    return { error: "Cliente no encontrado" };
-  }
-
-  eliminar(id) {
-    const idx = this.clientes.findIndex(c => c.id == id);
-    if (idx >= 0) {
-      return this.clientes.splice(idx, 1)[0];
-    }
-    return { error: "Cliente no encontrado" };
+  async eliminar(req, res) {
+    await Cliente.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
   }
 }
 
-module.exports = ClienteController;
+module.exports = new ClienteController();
